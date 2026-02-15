@@ -1,0 +1,133 @@
+/* ================================================
+   Senda - Homepage Styles
+   Clean, centered layout with card-based design
+   ================================================ */
+
+/* ========== HERO SECTION ========== */
+.hero-section {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto var(--spacing-2xl);
+}
+
+.title {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.1;
+}
+
+.gradient-text {
+    color: var(--sage-dark);
+}
+
+.subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--text-secondary);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* ========== ACTION CARDS ========== */
+.action-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.card {
+    background-color: var(--sage-light);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: var(--transition);
+    border: none;
+    box-shadow: none;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    background-color: var(--sage-medium);
+}
+
+.card:active {
+    transform: translateY(-2px);
+}
+
+.card-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: var(--spacing-lg);
+    color: var(--sage-darker);
+}
+
+.card-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.card-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--sage-darker);
+    margin-bottom: var(--spacing-sm);
+}
+
+.card-description {
+    font-size: var(--font-size-base);
+    color: var(--sage-darker);
+    line-height: 1.5;
+    opacity: 0.85;
+}
+
+/* Remove specific card colors - use base sage */
+.send-card,
+.receive-card {
+    background-color: var(--sage-light);
+}
+
+.send-card:hover,
+.receive-card:hover {
+    background-color: var(--sage-medium);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .action-cards {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+        max-width: 400px;
+    }
+
+    .title {
+        font-size: var(--font-size-3xl);
+    }
+
+    .subtitle {
+        font-size: var(--font-size-base);
+    }
+
+    .card {
+        padding: var(--spacing-lg);
+    }
+
+    .card-icon {
+        width: 48px;
+        height: 48px;
+        margin-bottom: var(--spacing-md);
+    }
+
+    .card-title {
+        font-size: var(--font-size-lg);
+    }
+
+    .card-description {
+        font-size: var(--font-size-sm);
+    }
+}
