@@ -142,11 +142,21 @@
     align-items: center;
 }
 
-.qr-box {
-    background-color: var(--off-white);
-    padding: var(--spacing-lg);
+.qr-code-wrapper {
+    background-color: #ffffff !important; /* Sempre branco para manter contraste do QR code */
+    padding: var(--spacing-md);
     border-radius: var(--radius-md);
-    display: inline-block;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--warm-gray);
+    transition: var(--transition);
+}
+
+.qr-code-wrapper:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
 #qrcode {
@@ -157,6 +167,7 @@
 
 #qrcode img {
     border-radius: var(--radius-sm);
+    display: block;
 }
 
 .qr-divider {

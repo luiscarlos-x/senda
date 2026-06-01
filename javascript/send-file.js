@@ -140,8 +140,13 @@ function showQRScanner() {
     html5QrCode = new Html5Qrcode("qr-reader");
 
     const config = {
-        fps: 10,
-        aspectRatio: 1.777778 // 16:9
+        fps: 25,
+        qrbox: (width, height) => {
+            const min = Math.min(width, height);
+            const size = Math.floor(min * 0.7); // 70% da área do vídeo
+            return { width: size, height: size };
+        },
+        aspectRatio: 1.0
     };
 
     // Start scanning with back camera (environment)

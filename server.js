@@ -133,10 +133,14 @@ app.post('/api/session', (req, res) => {
 
     console.log(`✅ Nova sessão criada: ${sessionId} (código: ${code})`);
 
+    // Obter o host da requisição dinamicamente para suportar IPs locais e domínios reais
+    const host = req.get('host') || `localhost:${PORT}`;
+    const protocol = req.protocol; // http ou https
+
     res.json({
         sessionId: sessionId,
         code: code,
-        url: `http://localhost:${PORT}/enviar-arquivo.html?session=${sessionId}`
+        url: `${protocol}://${host}/paginas/enviar-arquivo.html?session=${sessionId}`
     });
 });
 

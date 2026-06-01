@@ -115,9 +115,11 @@ body {
     opacity: 0.8;
 }
 
-.logo svg {
+.logo svg,
+.logo img {
     width: 32px;
     height: 32px;
+    object-fit: contain;
 }
 
 .logo-text {
