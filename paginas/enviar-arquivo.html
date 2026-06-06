@@ -21,24 +21,6 @@
                 <img src="../css/image/senda.png" alt="Senda Logo">
                 <span class="logo-text">Senda</span>
             </div>
-            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Alternar tema">
-                <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
-                </svg>
-                <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="5" />
-                    <line x1="12" y1="1" x2="12" y2="3" />
-                    <line x1="12" y1="21" x2="12" y2="23" />
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                    <line x1="1" y1="12" x2="3" y2="12" />
-                    <line x1="21" y1="12" x2="23" y2="12" />
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                </svg>
-            </button>
         </header>
 
         <main class="send-main">
@@ -57,7 +39,22 @@
 
             <!-- Step 1: Choose connection method -->
             <div class="step-content active" id="step1-content">
-                <div class="send-hero">
+                <!-- Corporate Connection Status (Hidden initially) -->
+                <div class="corporate-connection-status" id="corporateStatusArea" style="display: none; text-align: center; padding: var(--spacing-xl) var(--spacing-lg);">
+                    <div id="corporateLoading">
+                        <div class="loading-spinner" style="border: 4px solid var(--warm-gray); border-top: 4px solid var(--sage-dark); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto var(--spacing-md);"></div>
+                        <h2 class="send-title">Conectando...</h2>
+                        <p class="send-subtitle">Estabelecendo conexão segura com o guichê de atendimento.</p>
+                    </div>
+                    <div id="corporateOffline" style="display: none;">
+                        <div style="color: #D32F2F; font-size: 3rem; margin-bottom: var(--spacing-md);">⚠️</div>
+                        <h2 class="send-title" style="color: #D32F2F;">Atendente Offline</h2>
+                        <p class="send-subtitle">O guichê de recepção está fechado no momento. Por favor, aguarde o atendente iniciar a sessão ou tente novamente mais tarde.</p>
+                        <button class="method-button" onclick="window.location.reload()" style="margin-top: var(--spacing-md); cursor: pointer;">Tentar Novamente</button>
+                    </div>
+                </div>
+
+                <div class="send-hero" id="freeHero">
                     <h1 class="send-title">
                         Como deseja <span class="gradient-text">conectar</span>?
                     </h1>
@@ -66,7 +63,7 @@
                     </p>
                 </div>
 
-                <div class="connection-methods">
+                <div class="connection-methods" id="freeMethods">
                     <div class="method-card" id="qrCodeMethod">
                         <div class="method-icon">
                             <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -194,7 +191,7 @@
                                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                 clip-rule="evenodd" />
                         </svg>
-                        <span>Conectado</span>
+                        <span id="connectedBadgeText">Conectado</span>
                     </div>
 
                     <h1 class="upload-title">
@@ -203,6 +200,11 @@
                     <p class="upload-subtitle">
                         Selecione o arquivo que deseja enviar ao atendente
                     </p>
+
+                    <!-- LGPD Banner Status -->
+                    <div id="lgpdNoticeBanner" style="display: none; align-items: center; justify-content: center; gap: var(--spacing-xs); background-color: #E8F5E9; color: #2E7D32; padding: var(--spacing-sm); border-radius: var(--radius-md); margin-bottom: var(--spacing-lg); font-weight: 500; font-size: var(--font-size-sm); border: 1px solid #C8E6C9;">
+                        <span>🔒 Transmissão Segura LGPD: Seus arquivos serão transmitidos diretamente e apagados do servidor após o recebimento.</span>
+                    </div>
 
                     <div class="upload-area" id="uploadArea">
                         <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png,.docx" multiple

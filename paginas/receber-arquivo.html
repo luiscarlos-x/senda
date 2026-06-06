@@ -23,24 +23,15 @@
                 <img src="../css/image/senda.png" alt="Senda Logo">
                 <span class="logo-text">Senda</span>
             </div>
-            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Alternar tema">
-                <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
-                </svg>
-                <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="5" />
-                    <line x1="12" y1="1" x2="12" y2="3" />
-                    <line x1="12" y1="21" x2="12" y2="23" />
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                    <line x1="1" y1="12" x2="3" y2="12" />
-                    <line x1="21" y1="12" x2="23" y2="12" />
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                </svg>
-            </button>
+            <div class="header-actions">
+                <button id="sandwichMenuBtn" class="sandwich-menu-btn" onclick="toggleSandwichMenu()" aria-label="Menu de Configurações" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
         </header>
 
         <main class="receive-main">
@@ -54,15 +45,35 @@
                         </svg>
                         Voltar ao início
                     </button>
+                    <!-- Corporate Session User Status -->
+                    <div id="businessUserInfo" class="business-user-info" style="display: none;">
+                        <span class="company-badge" id="companyBadge">Empresa</span>
+                        <button class="logout-button" onclick="logoutBusiness()">
+                            Sair
+                            <svg viewBox="0 0 20 20" fill="currentColor" style="width: 14px; height: 14px;">
+                                <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="session-content">
-                    <!-- Waiting State -->
-                    <div class="session-state active" id="waitingState">
-                        <h2 class="session-title">Receber Arquivo</h2>
-                        <p class="session-subtitle">Gere um QR Code para o cliente enviar documentos</p>
+                    <!-- Loading State (Evita piscada na tela antes de conectar) -->
+                    <div class="session-state active" id="loadingState">
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 250px; gap: var(--spacing-sm);">
+                            <div style="width: 44px; height: 44px; border: 4px solid var(--warm-gray); border-top-color: var(--sage-dark); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                            <p style="color: var(--text-secondary); font-size: var(--font-size-sm); font-weight: 500;">Conectando ao servidor...</p>
+                        </div>
+                    </div>
 
-                        <button class="generate-button" onclick="generateSession()">
+                    <!-- Waiting State -->
+                    <div class="session-state" id="waitingState">
+                        <h2 class="session-title" id="waitingTitle">Receber Arquivo</h2>
+                        <p class="session-subtitle" id="waitingSubtitle">Gere um QR Code para o cliente enviar documentos</p>
+
+                        <!-- O painel de Configurações Corporativas foi movido para o Menu Sanduíche (settingsSidebar) no cabeçalho -->
+
+                        <button class="generate-button" id="startSessionBtn" onclick="initiateSession()">
                             <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect x="8" y="8" width="20" height="20" stroke="currentColor" stroke-width="2"
                                     rx="2" />
@@ -77,30 +88,30 @@
                                     d="M36 36H44M36 40H44M36 44H44M48 36H56M48 40H56M48 44H56M36 48H44M36 52H44M48 48H56M48 52H56M52 56H56"
                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                             </svg>
-                            <span>Gerar QR Code e Código</span>
+                            <span id="startSessionBtnText">Gerar QR Code</span>
                         </button>
                     </div>
 
                     <!-- Active Session State -->
                     <div class="session-state" id="activeSessionState">
-                        <div class="session-info-badge">
+                        <div class="session-info-badge" id="sessionInfoBadge">
                             <svg viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
                                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
                                     clip-rule="evenodd" />
                             </svg>
-                            <span>Sessão ativa - Aguardando arquivo</span>
+                            <span id="sessionInfoBadgeText">Sessão ativa - Aguardando arquivo</span>
                         </div>
 
                         <div class="qr-code-section">
-                            <h3 class="qr-title">Cliente pode escanear ou digitar o código</h3>
+                            <h3 class="qr-title" id="qrTitleText">Cliente pode escanear ou digitar o código</h3>
 
                             <div class="qr-display">
                                 <div class="qr-code-wrapper">
                                     <div id="qrcode" class="qr-code"></div>
                                 </div>
 
-                                <div class="code-display">
+                                <div class="code-display" id="codeDisplayArea">
                                     <div class="code-label">Código de 4 dígitos</div>
                                     <div class="code-value" id="sessionCode">----</div>
                                     <button class="code-copy-button" onclick="copyCode()">
@@ -115,13 +126,13 @@
                             </div>
                         </div>
 
-                        <button class="end-session-button" onclick="endSession()">
+                        <button class="end-session-button" id="endSessionBtn" onclick="endSession()">
                             <svg viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
                                     d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
                                     clip-rule="evenodd" />
                             </svg>
-                            Encerrar sessão
+                            <span id="endSessionBtnText">Encerrar sessão</span>
                         </button>
                     </div>
 
@@ -159,6 +170,62 @@
             <p>&copy; 2026 Senda. Todos os direitos reservados.</p>
         </footer>
     </div>
+
+    <!-- Sidebar Drawer (Menu Sanduíche de Configurações) -->
+    <div id="settingsSidebar" class="settings-sidebar">
+        <div class="sidebar-header">
+            <h3>Configurações</h3>
+            <button class="close-sidebar-btn" onclick="toggleSandwichMenu()" aria-label="Fechar menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="sidebar-content">
+            <!-- Modo Escuro Toggle -->
+            <div class="lgpd-toggle-container" style="border-top: none; padding-top: 0; margin-top: 0; margin-bottom: var(--spacing-md); border-bottom: 1px solid var(--warm-gray); padding-bottom: var(--spacing-sm);">
+                <input type="checkbox" id="darkModeCheckbox" onchange="toggleThemeFromCheckbox(this.checked)" class="form-checkbox-business">
+                <div class="lgpd-text-container">
+                    <label for="darkModeCheckbox" class="form-label-lgpd">Modo Escuro</label>
+                    <span class="form-hint-lgpd">Ativar ou desativar o tema escuro do painel</span>
+                </div>
+            </div>
+
+            <div id="businessConfigArea" class="business-config-area" style="display: none;">
+                <div class="form-group-business">
+                    <label class="form-label" for="deskSelector">Selecione seu Guichê</label>
+                    <select id="deskSelector" class="form-select-business">
+                        <!-- Populado via JS -->
+                    </select>
+                </div>
+                <details class="privacy-details">
+                    <summary class="privacy-summary">Configurações e Guichês</summary>
+                    <div class="collapsible-content" style="display: flex; flex-direction: column; gap: var(--spacing-md); margin-top: var(--spacing-sm);">
+                        <!-- LGPD Toggle -->
+                        <div class="lgpd-toggle-container" style="border-top: none; padding-top: 0; margin-top: 0;">
+                            <input type="checkbox" id="lgpdZeroStorage" class="form-checkbox-business">
+                            <div class="lgpd-text-container">
+                                <label for="lgpdZeroStorage" class="form-label-lgpd">Modo Zero-Persistência (LGPD)</label>
+                                <span class="form-hint-lgpd">Se ativado, os arquivos recebidos serão deletados permanentemente do servidor imediatamente após o download ou fechamento do guichê.</span>
+                            </div>
+                        </div>
+
+                        <!-- Guichês Manager -->
+                        <div class="desks-manager-container">
+                            <label class="form-label-lgpd">Adicionar Novo Guichê/Mesa:</label>
+                            <div class="new-desk-form">
+                                <input type="text" id="newDeskName" class="form-input-desk" placeholder="Ex: Guichê 02" autocomplete="off">
+                                <button type="button" class="btn-add-desk" onclick="addNewDesk()">Adicionar</button>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </div>
+    <!-- Backdrop overlay when drawer is open -->
+    <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="toggleSandwichMenu()"></div>
 
     <script src="../javascript/script.js"></script>
     <script src="../javascript/receive-file.js"></script>

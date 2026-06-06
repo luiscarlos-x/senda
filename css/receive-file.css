@@ -22,6 +22,55 @@
 
 .session-header-simple {
     margin-bottom: var(--spacing-xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.business-user-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.company-badge {
+    font-weight: var(--font-weight-semibold);
+    color: var(--sage-darker);
+    background-color: var(--sage-light);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: var(--font-size-sm);
+    transition: var(--transition);
+}
+
+[data-theme="dark"] .company-badge {
+    color: var(--off-white);
+    background-color: var(--sage-dark);
+}
+
+.logout-button {
+    background: none;
+    border: none;
+    color: #D32F2F;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: var(--transition);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+}
+
+.logout-button:hover {
+    background-color: #FFEBEE;
+    color: #C62828;
+}
+
+[data-theme="dark"] .logout-button:hover {
+    background-color: rgba(211, 47, 47, 0.15);
 }
 
 .back-home-button {
@@ -296,6 +345,18 @@
     border: 2px solid var(--warm-gray);
     border-radius: var(--radius-md);
     padding: var(--spacing-sm) var(--spacing-md);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.received-file-item:hover {
+    border-color: var(--sage-dark) !important;
+    background-color: var(--sage-light);
+}
+
+[data-theme="dark"] .received-file-item:hover {
+    border-color: var(--sage-medium) !important;
+    background-color: rgba(95, 111, 82, 0.1);
 }
 
 .received-file-icon {
@@ -443,4 +504,312 @@
         width: 36px;
         height: 36px;
     }
+}
+
+/* ========== BUSINESS CONFIG AREA (LGPD & DESKS) ========== */
+.business-config-area {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+    text-align: left;
+    background-color: white;
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--warm-gray);
+    transition: var(--transition);
+    width: 100%;
+}
+
+[data-theme="dark"] .business-config-area {
+    background-color: var(--cream);
+    border-color: var(--warm-gray);
+}
+
+.form-group-business {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.form-group-business .form-label {
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.form-select-business {
+    background-color: var(--off-white);
+    border: 2px solid var(--warm-gray);
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-base);
+    width: 100%;
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.form-select-business:focus {
+    outline: none;
+    border-color: var(--sage-dark);
+    background-color: white;
+}
+
+[data-theme="dark"] .form-select-business {
+    background-color: var(--off-white);
+}
+
+[data-theme="dark"] .form-select-business:focus {
+    background-color: var(--off-white);
+}
+
+.lgpd-toggle-container {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+    border-top: 1px solid var(--warm-gray);
+    padding-top: var(--spacing-sm);
+}
+
+.form-checkbox-business {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin-top: 2px;
+    accent-color: var(--sage-dark);
+}
+
+.lgpd-text-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label-lgpd {
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    color: var(--text-primary);
+}
+
+.form-hint-lgpd {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* Accordion "Abre e Fecha" para Privacidade (LGPD) */
+.privacy-details {
+    margin-top: var(--spacing-sm);
+    border-top: 1px solid var(--warm-gray);
+    padding-top: var(--spacing-sm);
+    width: 100%;
+}
+
+.privacy-summary {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--sage-darker);
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    padding: var(--spacing-xs) 0;
+    transition: var(--transition);
+}
+
+.privacy-summary:hover {
+    color: var(--sage-dark);
+}
+
+.privacy-details[open] .privacy-summary {
+    margin-bottom: var(--spacing-sm);
+}
+
+[data-theme="dark"] .privacy-summary {
+    color: var(--sage-light);
+}
+
+[data-theme="dark"] .privacy-summary:hover {
+    color: var(--sage-medium);
+}
+
+/* Guichês Manager Styling */
+.desks-manager-container {
+    margin-top: var(--spacing-sm);
+    border-top: 1px solid var(--warm-gray);
+    padding-top: var(--spacing-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    width: 100%;
+}
+
+.new-desk-form {
+    display: flex;
+    gap: var(--spacing-xs);
+    width: 100%;
+}
+
+.form-input-desk {
+    flex: 1;
+    padding: 10px 12px;
+    border: 2px solid var(--warm-gray);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    background-color: var(--off-white);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    transition: var(--transition);
+}
+
+.form-input-desk:focus {
+    outline: none;
+    border-color: var(--sage-dark);
+    background-color: white;
+}
+
+[data-theme="dark"] .form-input-desk:focus {
+    background-color: var(--off-white);
+}
+
+.btn-add-desk {
+    background-color: var(--sage-dark);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-add-desk:hover {
+    background-color: var(--sage-darker);
+}
+
+/* ========== SANDWICH MENU BUTTON ========== */
+.sandwich-menu-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--warm-gray);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    transition: var(--transition);
+}
+
+.sandwich-menu-btn:hover {
+    background-color: var(--sage-light);
+    color: var(--sage-darker);
+}
+
+.sandwich-menu-btn svg {
+    width: 22px;
+    height: 22px;
+}
+
+/* ========== SETTINGS SIDEBAR DRAWER ========== */
+.settings-sidebar {
+    position: fixed;
+    top: 0;
+    right: -320px; /* Hidden by default */
+    width: 320px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: -4px 0 30px rgba(0, 0, 0, 0.1);
+    z-index: 1100;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-md);
+}
+
+[data-theme="dark"] .settings-sidebar {
+    background-color: var(--cream);
+}
+
+.settings-sidebar.open {
+    right: 0;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--warm-gray);
+    padding-bottom: var(--spacing-xs);
+}
+
+.sidebar-header h3 {
+    font-size: var(--font-size-lg);
+    color: var(--text-primary);
+}
+
+.close-sidebar-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.close-sidebar-btn:hover {
+    background-color: var(--warm-gray);
+    color: var(--text-primary);
+}
+
+.close-sidebar-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ========== SIDEBAR BACKDROP ========== */
+.sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1050;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Adjust config area when inside sidebar drawer */
+.settings-sidebar .business-config-area {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin-bottom: 0;
+    box-shadow: none;
+}
+
+/* Spinner Animation */
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }

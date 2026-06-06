@@ -1,0 +1,23 @@
+[
+  {
+    "username": "luiscarlos20507@gmail.com",
+    "passwordHash": "d6ee9d31363c4c4ec86979988f670ca4374af9e0ea6de75fb62c83c4b5e888e322f70d73cb9cf1a5b63afdb29e840abd1c374a076dd73332c342b899753d3763",
+    "salt": "8daadbecab758c47f2a16d6c2e155cd0",
+    "companyName": "Luis Calos",
+    "createdAt": 1780362358730
+  },
+  {
+    "username": "luiscarlos2057@gmail.com",
+    "passwordHash": "14c08497ae635b459a3fccf10e823129cb8e7d8740b60647b1d39804a49cf33881f0d7b5a3ccdac2f828a031b2aaa2815843b8b30aafb4571c0dfe7024c20deb",
+    "salt": "a90a47ef5a4d3107dceb807d7a13346c",
+    "companyName": "Luis Carlos",
+    "createdAt": 1780362542185
+  },
+  {
+    "username": "luiscarlo20507@gmail.com",
+    "passwordHash": "0b6869bfba2ec9f52bdc1281062a7743c19ac1b43800f428884e1f3e6d2ddd379d991e508c1ebc45889deb6cf59655c8797ddedd5ed356e377e3a8b7983d323d",
+    "salt": "e84d821f9a62bf60f7da481a9444f102",
+    "companyName": "luis",
+    "createdAt": 1780362638358
+  }
+]

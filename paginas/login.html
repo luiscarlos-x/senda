@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business - Senda</title>
+    <meta name="description" content="Acesse a área corporativa do Senda e gerencie seus envios instantâneos de arquivos.">
+    <link rel="icon" type="image/png" href="../css/image/senda.png">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <script src="../javascript/theme.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo" onclick="window.location.href='/'">
+                <img src="../css/image/senda.png" alt="Senda Logo">
+                <span class="logo-text">Senda</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="login-main">
+            <div class="login-container">
+                <div class="login-header">
+                    <h1 class="login-title" id="pageTitle">Área Business</h1>
+                    <p class="login-subtitle" id="pageSubtitle">Acesse a conta da sua empresa para receber arquivos</p>
+                </div>
+
+                <!-- Tabs -->
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Entrar</button>
+                    <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Criar Conta</button>
+                </div>
+
+                <!-- Alert Message -->
+                <div class="auth-alert" id="authAlert" style="display: none;">
+                    <svg viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <span id="authAlertText">Erro ao autenticar.</span>
+                </div>
+
+                <!-- Form -->
+                <form class="auth-form" id="authForm" onsubmit="handleAuthSubmit(event)">
+                    <div class="form-group" id="companyGroup" style="display: none;">
+                        <label class="form-label" for="companyName">Nome da Empresa</label>
+                        <input class="form-input" type="text" id="companyName" placeholder="Ex: Clínica Sorria Mais" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="username">E-mail</label>
+                        <input class="form-input" type="text" id="username" placeholder="seuemail@empresa.com" required autocomplete="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password">Senha</label>
+                        <input class="form-input" type="password" id="password" placeholder="Sua senha secreta" required autocomplete="current-password">
+                    </div>
+
+                    <button class="auth-button" type="submit" id="submitBtn">
+                        <span id="btnText">Entrar</span>
+                        <svg viewBox="0 0 20 20" fill="currentColor" style="width: 18px; height: 18px;">
+                            <path fill-rule="evenodd"
+                                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </form>
+
+                <!-- Back Link -->
+                <div class="back-link-container">
+                    <a href="/" class="back-link">
+                        <svg viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Voltar ao início
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 Senda. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+
+    <script src="../javascript/login.js"></script>
+</body>
+
+</html>

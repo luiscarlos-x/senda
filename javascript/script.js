@@ -102,9 +102,32 @@ document.addEventListener('DOMContentLoaded', () => {
     // Adicionar listener de teclado para acessibilidade
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-            // Fechar modais/popups (quando implementados)
+            const dropdown = document.getElementById('homeDropdownMenu');
+            if (dropdown && dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+            }
         }
     });
+});
+
+// Toggle para o menu drop-down da Home (Sandwich)
+function toggleHomeMenu(event) {
+    if (event) event.stopPropagation();
+    const dropdown = document.getElementById('homeDropdownMenu');
+    if (dropdown) {
+        dropdown.classList.toggle('show');
+    }
+}
+
+// Fechar menu se clicar fora
+document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('homeDropdownMenu');
+    const btn = document.getElementById('homeSandwichBtn');
+    if (dropdown && dropdown.classList.contains('show')) {
+        if (!dropdown.contains(e.target) && (!btn || !btn.contains(e.target))) {
+            dropdown.classList.remove('show');
+        }
+    }
 });
 
 // Log de informações úteis para desenvolvimento

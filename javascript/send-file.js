@@ -7,11 +7,20 @@ let selectedFiles = [];
 let currentSessionId = null;
 let html5QrCode = null; // QR Code scanner instance
 
+let isBusinessSession = false;
+let sessionLgpdZeroStorage = false;
+
 window.addEventListener('load', () => {
     try {
         if (typeof io !== 'undefined') {
             socket = io(BACKEND_URL);
-            socket.on('connect', () => console.log('Socket OK'));
+            socket.on('connect', () => {
+                console.log('Socket OK');
+                checkUrlParameters();
+            });
+            socket.on('joined-as-sender', onJoinedAsSender);
+            socket.on('attendant-status', onAttendantStatus);
+            socket.on('sender-error', (data) => alert('Erro: ' + data.error));
         }
     } catch (e) {
         console.warn('Socket.io nao disponivel:', e);
@@ -21,6 +30,91 @@ window.addEventListener('load', () => {
         setupFileUpload();
     }
 });
+
+function checkUrlParameters() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionParam = urlParams.get('session');
+    const businessParam = urlParams.get('business');
+    const deskParam = urlParams.get('desk');
+
+    if (businessParam && deskParam) {
+        // Conexão business direta
+        currentSessionId = `business_${businessParam}_${deskParam}`;
+        isBusinessSession = true;
+        
+        console.log(`📡 Conectando ao guichê corporativo: ${currentSessionId}`);
+        showLoadingConnectionState();
+        
+        socket.emit('join-as-sender', {
+            businessId: businessParam,
+            deskId: deskParam
+        });
+    } else if (sessionParam) {
+        // Conexão grátis por link direto
+        currentSessionId = sessionParam;
+        isBusinessSession = false;
+        
+        console.log(`📡 Conectando à sessão grátis: ${currentSessionId}`);
+        socket.emit('join-as-sender', sessionParam);
+    }
+}
+
+function onJoinedAsSender(data) {
+    currentSessionId = data.sessionId;
+    isBusinessSession = !!data.isBusiness;
+    sessionLgpdZeroStorage = !!data.lgpdZeroStorage;
+    
+    updateConnectionUI();
+    goToUploadStep();
+}
+
+function onAttendantStatus(data) {
+    if (data.online) {
+        console.log("Atendente está online!");
+    } else {
+        showAttendantOfflineState();
+    }
+}
+
+function showLoadingConnectionState() {
+    document.getElementById('freeHero').style.display = 'none';
+    document.getElementById('freeMethods').style.display = 'none';
+    document.getElementById('corporateStatusArea').style.display = 'block';
+    document.getElementById('corporateLoading').style.display = 'block';
+    document.getElementById('corporateOffline').style.display = 'none';
+}
+
+function showAttendantOfflineState() {
+    document.getElementById('freeHero').style.display = 'none';
+    document.getElementById('freeMethods').style.display = 'none';
+    document.getElementById('corporateStatusArea').style.display = 'block';
+    document.getElementById('corporateLoading').style.display = 'none';
+    document.getElementById('corporateOffline').style.display = 'block';
+}
+
+function updateConnectionUI() {
+    // Definir mensagem do badge de conexão
+    const badgeText = document.getElementById('connectedBadgeText');
+    if (badgeText) {
+        badgeText.textContent = isBusinessSession ? 'Conexão Business Ativa' : 'Conectado';
+    }
+
+    // Configurar tarja de privacidade LGPD
+    const lgpdBanner = document.getElementById('lgpdNoticeBanner');
+    if (lgpdBanner) {
+        lgpdBanner.style.display = sessionLgpdZeroStorage ? 'flex' : 'none';
+    }
+
+    // Ajustar dicas sobre limites de arquivos dependendo da conta
+    const uploadHint = document.querySelector('.upload-hint');
+    if (uploadHint) {
+        if (isBusinessSession) {
+            uploadHint.textContent = 'Até 5 arquivos • PDF, JPG, PNG ou DOCX • Máx. 100MB total';
+        } else {
+            uploadHint.textContent = 'Até 2 arquivos • PDF, JPG, PNG ou DOCX • Máx. 10MB total';
+        }
+    }
+}
 
 function showCodeInput() {
     document.querySelector('.connection-methods').style.display = 'none';
@@ -283,6 +377,11 @@ function handleFileSelect() {
     const newFiles = Array.from(input.files);
     if (!newFiles.length) return;
 
+    // Determinar limites dinâmicos
+    const maxFiles = isBusinessSession ? 5 : 2;
+    const maxFileSize = (isBusinessSession ? 100 : 10) * 1024 * 1024; // 100MB vs 10MB
+    const maxFileSizeText = isBusinessSession ? '100MB' : '10MB';
+
     const valid = ['application/pdf', 'image/jpeg', 'image/png', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
 
     for (const file of newFiles) {
@@ -291,30 +390,30 @@ function handleFileSelect() {
             input.value = '';
             return;
         }
-        if (file.size > 50 * 1024 * 1024) {
-            showErrorPopup('Arquivo muito grande', `O arquivo "${file.name}" tem ${formatFileSize(file.size)}. O tamanho máximo permitido é 50MB.`);
+        if (file.size > maxFileSize) {
+            showErrorPopup('Arquivo muito grande', `O arquivo "${file.name}" tem ${formatFileSize(file.size)}. O tamanho máximo permitido por arquivo é ${maxFileSizeText}.`);
             input.value = '';
             return;
         }
     }
 
-    // Check total size (existing + new) <= 50MB
+    // Check total size (existing + new)
     const existingSize = selectedFiles.reduce((sum, f) => sum + f.size, 0);
     const newSize = newFiles.reduce((sum, f) => sum + f.size, 0);
     const totalSize = existingSize + newSize;
 
-    if (totalSize > 50 * 1024 * 1024) {
-        const available = 50 * 1024 * 1024 - existingSize;
-        showErrorPopup('Limite de tamanho excedido', `O total de todos os arquivos não pode ultrapassar 50MB. Você ainda tem ${formatFileSize(Math.max(0, available))} disponíveis.`);
+    if (totalSize > maxFileSize) {
+        const available = maxFileSize - existingSize;
+        showErrorPopup('Limite de tamanho excedido', `O total de todos os arquivos não pode ultrapassar ${maxFileSizeText}. Você ainda tem ${formatFileSize(Math.max(0, available))} disponíveis.`);
         input.value = '';
         return;
     }
 
-    // Limit to 5 total
+    // Limit total count
     const total = selectedFiles.length + newFiles.length;
-    if (total > 5) {
-        const remaining = 5 - selectedFiles.length;
-        showErrorPopup('Limite de arquivos', `Você pode enviar no máximo 5 arquivos. ${remaining > 0 ? `Ainda pode adicionar ${remaining}.` : 'Remova algum para adicionar outro.'}`);
+    if (total > maxFiles) {
+        const remaining = maxFiles - selectedFiles.length;
+        showErrorPopup('Limite de arquivos', `Você pode enviar no máximo ${maxFiles} arquivos. ${remaining > 0 ? `Ainda pode adicionar ${remaining}.` : 'Remova algum para adicionar outro.'}`);
         input.value = '';
         return;
     }
