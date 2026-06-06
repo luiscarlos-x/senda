@@ -30,7 +30,7 @@ window.addEventListener('load', async () => {
             } else {
                 // Reconecta o atendente à sessão no backend se o socket oscilar
                 if (isBusinessMode) {
-                    console.log('📡 Reconectando ao guichê corporativo:', currentSession.sessionId);
+                    console.log('📡 Reconectando à sessão corporativa:', currentSession.sessionId);
                     socket.emit('join-session', {
                         businessId: currentSession.businessId,
                         deskId: currentSession.deskId
@@ -63,13 +63,13 @@ async function setupBusinessUI() {
     document.getElementById('businessConfigArea').style.display = 'flex';
     document.getElementById('sandwichMenuBtn').style.display = 'block';
     document.getElementById('waitingTitle').textContent = 'Central de Recebimento';
-    document.getElementById('waitingSubtitle').textContent = 'Selecione o guichê de atendimento para conectar';
+    document.getElementById('waitingSubtitle').textContent = 'Selecione a sessão de atendimento para conectar';
     document.getElementById('startSessionBtnText').textContent = 'Gerar QR Code';
 
-    // Carregar configurações da empresa (guichês e LGPD)
+    // Carregar configurações da empresa (sessões e LGPD)
     try {
         const res = await fetch(`${BACKEND_URL}/api/business/config/${loggedBusinessId}`);
-        if (!res.ok) throw new Error('Erro ao carregar dados do guichê.');
+        if (!res.ok) throw new Error('Erro ao carregar dados da sessão.');
         const config = await res.json();
         
         // Configurar toggle LGPD
@@ -83,10 +83,10 @@ async function setupBusinessUI() {
             await saveBusinessPreferences(lgpdCheckbox.checked, currentDesks);
         };
 
-        // Popular guichês
+        // Popular sessões
         populateDesksSelector();
 
-        // Ao alterar o guichê no dropdown, iniciar a sessão automaticamente
+        // Ao alterar a sessão no dropdown, iniciar automaticamente
         const selector = document.getElementById('deskSelector');
         if (selector) {
             selector.onchange = () => {
@@ -94,7 +94,7 @@ async function setupBusinessUI() {
             };
         }
 
-        // Adicionar keydown listener para o input de guichê
+        // Adicionar keydown listener para o input de sessão
         const nameInput = document.getElementById('newDeskName');
         if (nameInput) {
             nameInput.onkeydown = (event) => {
@@ -111,7 +111,7 @@ async function setupBusinessUI() {
     }
 }
 
-// Popular seletor de guichês
+// Popular seletor de sessões
 function populateDesksSelector(selectedId = null) {
     const selector = document.getElementById('deskSelector');
     if (!selector) return;
@@ -125,21 +125,21 @@ function populateDesksSelector(selectedId = null) {
     }
 }
 
-// Adicionar novo guichê
+// Adicionar nova sessão
 async function addNewDesk() {
     const nameInput = document.getElementById('newDeskName');
     if (!nameInput) return;
     
     const deskName = nameInput.value.trim();
     if (!deskName) {
-        showToast('Por favor, insira o nome do guichê.');
+        showToast('Por favor, insira o nome da sessão.');
         return;
     }
 
-    // Verificar se já existe um guichê com esse nome
+    // Verificar se já existe uma sessão com esse nome
     const exists = currentDesks.some(d => d.name.toLowerCase() === deskName.toLowerCase());
     if (exists) {
-        showToast('Já existe um guichê com este nome.');
+        showToast('Já existe uma sessão com este nome.');
         return;
     }
 
@@ -166,16 +166,16 @@ async function addNewDesk() {
         });
         
         if (response.ok) {
-            showToast('Guichê adicionado!');
+            showToast('Sessão adicionada!');
             nameInput.value = '';
-            populateDesksSelector(deskId); // Atualiza e seleciona o novo guichê
+            populateDesksSelector(deskId); // Atualiza e seleciona a nova sessão
         } else {
             const err = await response.json();
-            showToast(err.error || 'Erro ao adicionar guichê.');
+            showToast(err.error || 'Erro ao adicionar sessão.');
             currentDesks.pop(); // Remove em caso de falha
         }
     } catch (e) {
-        console.error('Erro ao adicionar guichê:', e);
+        console.error('Erro ao adicionar sessão:', e);
         showToast('Erro ao conectar com o servidor.');
         currentDesks.pop();
     }
@@ -231,7 +231,7 @@ async function initiateSession() {
     }
 }
 
-// Iniciar Guichê Business
+// Iniciar Sessão Business
 async function startBusinessSession() {
     const selector = document.getElementById('deskSelector');
     const selectedDeskId = selector.value;
@@ -251,7 +251,7 @@ async function startBusinessSession() {
 
     // Conectar ao WebSocket na sala correspondente
     if (socket && socket.connected) {
-        console.log('📡 Conectando ao canal guichê:', sessionId);
+        console.log('📡 Conectando ao canal sessão:', sessionId);
         socket.emit('join-session', {
             businessId: loggedBusinessId,
             deskId: selectedDeskId
@@ -282,7 +282,7 @@ async function startBusinessSession() {
     document.getElementById('codeDisplayArea').style.display = 'none';
     document.getElementById('qrTitleText').textContent = `Escaneie o QR Code`;
     document.getElementById('sessionInfoBadgeText').textContent = `Ativo - ${selectedDeskName}`;
-    document.getElementById('endSessionBtnText').textContent = 'Fechar Guichê';
+    document.getElementById('endSessionBtnText').textContent = 'Fechar Sessão';
 
     showState('activeSessionState');
 }

@@ -633,7 +633,7 @@
     color: var(--sage-medium);
 }
 
-/* Guichês Manager Styling */
+/* Sessões Manager Styling */
 .desks-manager-container {
     margin-top: var(--spacing-sm);
     border-top: 1px solid var(--warm-gray);

@@ -137,7 +137,7 @@ function cleanupSession(sessionId) {
                         try {
                             if (fs.existsSync(dirPath) && fs.readdirSync(dirPath).length === 0) {
                                 fs.rmdirSync(dirPath);
-                                console.log(`🗑️  Diretório do guichê vazio removido: ${dirPath}`);
+                                console.log(`🗑️  Diretório da sessão vazio removido: ${dirPath}`);
                                 
                                 const parentDirPath = path.dirname(dirPath);
                                 if (parentDirPath !== UPLOAD_DIR && fs.existsSync(parentDirPath) && fs.readdirSync(parentDirPath).length === 0) {
@@ -290,7 +290,7 @@ app.post('/api/upload/:sessionId', upload.array('files', 5), (req, res) => {
     const sessionId = req.params.sessionId;
     let session = sessions.get(sessionId);
 
-    // Se for modo Business e a sessão ainda não está no mapa de sessões ativas (atendente conectando guichê)
+    // Se for modo Business e a sessão ainda não está no mapa de sessões ativas (atendente conectando sessão)
     if (!session && sessionId.startsWith('business_')) {
         const raw = sessionId.substring("business_".length);
         const lastUnderscoreIndex = raw.lastIndexOf('_');
@@ -432,7 +432,7 @@ app.get('/api/download/:sessionId/:fileIndex?', (req, res) => {
                         if (dirPath !== UPLOAD_DIR) {
                             if (fs.existsSync(dirPath) && fs.readdirSync(dirPath).length === 0) {
                                 fs.rmdirSync(dirPath);
-                                console.log(`🗑️  Diretório do guichê vazio removido (LGPD): ${dirPath}`);
+                                console.log(`🗑️  Diretório da sessão vazio removido (LGPD): ${dirPath}`);
                                 
                                 const parentDirPath = path.dirname(dirPath);
                                 if (parentDirPath !== UPLOAD_DIR && fs.existsSync(parentDirPath) && fs.readdirSync(parentDirPath).length === 0) {
@@ -477,7 +477,7 @@ app.delete('/api/file/:sessionId/:fileIndex', (req, res) => {
             if (dirPath !== UPLOAD_DIR) {
                 if (fs.existsSync(dirPath) && fs.readdirSync(dirPath).length === 0) {
                     fs.rmdirSync(dirPath);
-                    console.log(`🗑️  Diretório do guichê vazio removido após exclusão: ${dirPath}`);
+                    console.log(`🗑️  Diretório da sessão vazio removido após exclusão: ${dirPath}`);
                     
                     const parentDirPath = path.dirname(dirPath);
                     if (parentDirPath !== UPLOAD_DIR && fs.existsSync(parentDirPath) && fs.readdirSync(parentDirPath).length === 0) {
@@ -543,7 +543,7 @@ io.on('connection', (socket) => {
         if (isBusiness) {
             const config = Database.getBusinessConfig(businessId);
             if (!config || !config.desks.some(d => d.id === deskId)) {
-                return socket.emit('session-error', { error: 'Empresa ou Guichê inválidos' });
+                return socket.emit('session-error', { error: 'Empresa ou Sessão inválidos' });
             }
 
             // Inicializar ou re-atribuir sessão business
@@ -562,7 +562,7 @@ io.on('connection', (socket) => {
                 session.attendantSocket = socket.id;
                 session.lgpdZeroStorage = config.lgpdZeroStorage; // Atualizar preferência de LGPD
             }
-            console.log(`👤 Atendente corporativo conectado no guichê [${deskId}] da empresa [${businessId}]`);
+            console.log(`👤 Atendente corporativo conectado na sessão [${deskId}] da empresa [${businessId}]`);
         } else {
             // Sessão normal grátis
             if (session) {
@@ -614,7 +614,7 @@ io.on('connection', (socket) => {
             if (!session || !session.attendantSocket) {
                 // Notificar que atendente está offline
                 socket.emit('attendant-status', { online: false });
-                console.log(`📱 Cliente tentou conectar ao guichê [${data.deskId}] de [${data.businessId}], mas o atendente está offline`);
+                console.log(`📱 Cliente tentou conectar à sessão [${data.deskId}] de [${data.businessId}], mas o atendente está offline`);
             } else {
                 socket.join(sessionId);
                 socket.emit('joined-as-sender', { 
@@ -625,7 +625,7 @@ io.on('connection', (socket) => {
                 socket.emit('attendant-status', { online: true });
                 // Notificar o atendente
                 io.to(session.attendantSocket).emit('client-connected', { socketId: socket.id });
-                console.log(`📱 Cliente conectou ao guichê [${data.deskId}] da empresa [${data.businessId}] (Online)`);
+                console.log(`📱 Cliente conectou à sessão [${data.deskId}] da empresa [${data.businessId}] (Online)`);
             }
         } else {
             // Sessão gratuita

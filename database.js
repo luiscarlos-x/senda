@@ -103,7 +103,7 @@ const Database = {
             companyName: newUser.companyName,
             lgpdZeroStorage: false, // Por padrão salva os arquivos
             desks: [
-                { id: 'guiche-01', name: 'Guichê 01', createdAt: Date.now() } // Guichê padrão inicial
+                { id: 'guiche-01', name: 'Sessão 01', createdAt: Date.now() } // Sessão padrão inicial
             ]
         };
         writeConfigs(configs);

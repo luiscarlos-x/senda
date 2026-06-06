@@ -194,28 +194,28 @@
 
             <div id="businessConfigArea" class="business-config-area" style="display: none;">
                 <div class="form-group-business">
-                    <label class="form-label" for="deskSelector">Selecione seu Guichê</label>
+                    <label class="form-label" for="deskSelector">Selecione sua Sessão</label>
                     <select id="deskSelector" class="form-select-business">
                         <!-- Populado via JS -->
                     </select>
                 </div>
                 <details class="privacy-details">
-                    <summary class="privacy-summary">Configurações e Guichês</summary>
+                    <summary class="privacy-summary">Configurações e Sessões</summary>
                     <div class="collapsible-content" style="display: flex; flex-direction: column; gap: var(--spacing-md); margin-top: var(--spacing-sm);">
                         <!-- LGPD Toggle -->
                         <div class="lgpd-toggle-container" style="border-top: none; padding-top: 0; margin-top: 0;">
                             <input type="checkbox" id="lgpdZeroStorage" class="form-checkbox-business">
                             <div class="lgpd-text-container">
                                 <label for="lgpdZeroStorage" class="form-label-lgpd">Modo Zero-Persistência (LGPD)</label>
-                                <span class="form-hint-lgpd">Se ativado, os arquivos recebidos serão deletados permanentemente do servidor imediatamente após o download ou fechamento do guichê.</span>
+                                <span class="form-hint-lgpd">Se ativado, os arquivos recebidos serão deletados permanentemente do servidor imediatamente após o download ou fechamento da sessão.</span>
                             </div>
                         </div>
 
-                        <!-- Guichês Manager -->
+                        <!-- Sessões Manager -->
                         <div class="desks-manager-container">
-                            <label class="form-label-lgpd">Adicionar Novo Guichê/Mesa:</label>
+                            <label class="form-label-lgpd">Adicionar Nova Sessão:</label>
                             <div class="new-desk-form">
-                                <input type="text" id="newDeskName" class="form-input-desk" placeholder="Ex: Guichê 02" autocomplete="off">
+                                <input type="text" id="newDeskName" class="form-input-desk" placeholder="Ex: Sessão 02" autocomplete="off">
                                 <button type="button" class="btn-add-desk" onclick="addNewDesk()">Adicionar</button>
                             </div>
                         </div>
