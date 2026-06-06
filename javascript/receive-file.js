@@ -27,6 +27,18 @@ window.addEventListener('load', async () => {
             console.log('✅ Socket conectado');
             if (!currentSession) {
                 initiateSession();
+            } else {
+                // Reconecta o atendente à sessão no backend se o socket oscilar
+                if (isBusinessMode) {
+                    console.log('📡 Reconectando ao guichê corporativo:', currentSession.sessionId);
+                    socket.emit('join-session', {
+                        businessId: currentSession.businessId,
+                        deskId: currentSession.deskId
+                    });
+                } else {
+                    console.log('📡 Reconectando à sala grátis:', currentSession.sessionId);
+                    socket.emit('join-session', currentSession.sessionId);
+                }
             }
         });
         socket.on('files-received', onFilesReceived);

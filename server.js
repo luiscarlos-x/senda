@@ -54,9 +54,11 @@ const storage = multer.diskStorage({
         let dest = UPLOAD_DIR;
 
         if (sessionId && sessionId.startsWith('business_')) {
-            const parts = sessionId.split('_');
-            if (parts.length === 3) {
-                const [_, businessId, deskId] = parts;
+            const raw = sessionId.substring("business_".length);
+            const lastUnderscoreIndex = raw.lastIndexOf('_');
+            if (lastUnderscoreIndex !== -1) {
+                const businessId = raw.substring(0, lastUnderscoreIndex);
+                const deskId = raw.substring(lastUnderscoreIndex + 1);
                 
                 // Buscar da sessão ativa primeiro
                 let lgpdZeroStorage = false;
@@ -290,9 +292,11 @@ app.post('/api/upload/:sessionId', upload.array('files', 5), (req, res) => {
 
     // Se for modo Business e a sessão ainda não está no mapa de sessões ativas (atendente conectando guichê)
     if (!session && sessionId.startsWith('business_')) {
-        const parts = sessionId.split('_'); // business_companyId_deskId
-        if (parts.length === 3) {
-            const [_, businessId, deskId] = parts;
+        const raw = sessionId.substring("business_".length);
+        const lastUnderscoreIndex = raw.lastIndexOf('_');
+        if (lastUnderscoreIndex !== -1) {
+            const businessId = raw.substring(0, lastUnderscoreIndex);
+            const deskId = raw.substring(lastUnderscoreIndex + 1);
             const config = Database.getBusinessConfig(businessId);
             if (config && config.desks.some(d => d.id === deskId)) {
                 session = {
