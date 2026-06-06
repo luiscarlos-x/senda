@@ -202,12 +202,12 @@
                 <details class="privacy-details">
                     <summary class="privacy-summary">Configurações e Sessões</summary>
                     <div class="collapsible-content" style="display: flex; flex-direction: column; gap: var(--spacing-md); margin-top: var(--spacing-sm);">
-                        <!-- LGPD Toggle -->
+                        <!-- Persistência de Dados Toggle -->
                         <div class="lgpd-toggle-container" style="border-top: none; padding-top: 0; margin-top: 0;">
-                            <input type="checkbox" id="lgpdZeroStorage" class="form-checkbox-business">
+                            <input type="checkbox" id="dataPersistenceToggle" class="form-checkbox-business">
                             <div class="lgpd-text-container">
-                                <label for="lgpdZeroStorage" class="form-label-lgpd">Modo Zero-Persistência (LGPD)</label>
-                                <span class="form-hint-lgpd">Se ativado, os arquivos recebidos serão deletados permanentemente do servidor imediatamente após o download ou fechamento da sessão.</span>
+                                <label for="dataPersistenceToggle" class="form-label-lgpd">Modo Persistência de Dados</label>
+                                <span class="form-hint-lgpd">Se ativado, os arquivos recebidos serão salvos no servidor organizados por sessão. Se desativado, os arquivos serão deletados após o download.</span>
                             </div>
                         </div>
 
@@ -221,6 +221,15 @@
                         </div>
                     </div>
                 </details>
+                <!-- Botão Gerenciar Arquivos (visível apenas com persistência ativada) -->
+                <div id="manageFilesArea" style="display: none; margin-top: var(--spacing-sm); border-top: 1px solid var(--warm-gray); padding-top: var(--spacing-sm);">
+                    <button type="button" class="btn-manage-files" onclick="window.location.href='gerenciar-arquivos.html'">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        Gerenciar Arquivos
+                    </button>
+                </div>
             </div>
         </div>
     </div>

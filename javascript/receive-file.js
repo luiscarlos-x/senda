@@ -72,15 +72,19 @@ async function setupBusinessUI() {
         if (!res.ok) throw new Error('Erro ao carregar dados da sessão.');
         const config = await res.json();
         
-        // Configurar toggle LGPD
-        const lgpdCheckbox = document.getElementById('lgpdZeroStorage');
-        lgpdCheckbox.checked = !!config.lgpdZeroStorage;
+        // Configurar toggle Persistência de Dados (invertido: checked = persistir, !checked = efêmero)
+        const persistCheckbox = document.getElementById('dataPersistenceToggle');
+        persistCheckbox.checked = !config.lgpdZeroStorage; // Invertido: lgpdZeroStorage false = persistência ON
         
         currentDesks = config.desks || [];
 
-        // Listener para salvar LGPD ao alternar
-        lgpdCheckbox.onchange = async () => {
-            await saveBusinessPreferences(lgpdCheckbox.checked, currentDesks);
+        // Controlar visibilidade do botão Gerenciar Arquivos
+        updateManageFilesVisibility(persistCheckbox.checked);
+
+        // Listener para salvar preferência ao alternar
+        persistCheckbox.onchange = async () => {
+            updateManageFilesVisibility(persistCheckbox.checked);
+            await saveBusinessPreferences(!persistCheckbox.checked, currentDesks); // Invertido
         };
 
         // Popular sessões
@@ -144,7 +148,7 @@ async function addNewDesk() {
     }
 
     // Gerar um ID amigável e único baseado no timestamp
-    const deskId = 'guiche-' + Date.now();
+    const deskId = 'sessao-' + Date.now();
     
     const newDesk = {
         id: deskId,
@@ -154,15 +158,15 @@ async function addNewDesk() {
 
     currentDesks.push(newDesk);
 
-    const lgpdCheckbox = document.getElementById('lgpdZeroStorage');
-    const lgpdChecked = lgpdCheckbox ? lgpdCheckbox.checked : false;
+    const persistCheckbox = document.getElementById('dataPersistenceToggle');
+    const lgpdZeroStorage = persistCheckbox ? !persistCheckbox.checked : true; // Invertido
 
     // Salvar no servidor
     try {
         const response = await fetch(`${BACKEND_URL}/api/business/config/${loggedBusinessId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ lgpdZeroStorage: lgpdChecked, desks: currentDesks })
+            body: JSON.stringify({ lgpdZeroStorage: lgpdZeroStorage, desks: currentDesks })
         });
         
         if (response.ok) {
@@ -194,6 +198,14 @@ async function saveBusinessPreferences(lgpdZeroStorage, desks) {
         }
     } catch (e) {
         console.error('Erro ao salvar preferências:', e);
+    }
+}
+
+// Controlar visibilidade do botão "Gerenciar Arquivos"
+function updateManageFilesVisibility(isPersistenceOn) {
+    const area = document.getElementById('manageFilesArea');
+    if (area) {
+        area.style.display = isPersistenceOn ? 'block' : 'none';
     }
 }
 
@@ -236,7 +248,7 @@ async function startBusinessSession() {
     const selector = document.getElementById('deskSelector');
     const selectedDeskId = selector.value;
     const selectedDeskName = selector.options[selector.selectedIndex].text;
-    const lgpdCheckbox = document.getElementById('lgpdZeroStorage');
+    const persistCheckbox = document.getElementById('dataPersistenceToggle');
 
     const sessionId = `business_${loggedBusinessId}_${selectedDeskId}`;
 
@@ -246,7 +258,7 @@ async function startBusinessSession() {
         businessId: loggedBusinessId,
         deskId: selectedDeskId,
         deskName: selectedDeskName,
-        lgpdZeroStorage: lgpdCheckbox.checked
+        lgpdZeroStorage: persistCheckbox ? !persistCheckbox.checked : true // Invertido
     };
 
     // Conectar ao WebSocket na sala correspondente

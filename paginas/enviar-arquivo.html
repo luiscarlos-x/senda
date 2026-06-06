@@ -56,15 +56,15 @@
 
                 <div class="send-hero" id="freeHero">
                     <h1 class="send-title">
-                        Como deseja <span class="gradient-text">conectar</span>?
+                        Conectar via <span class="gradient-text">Qr Code</span>
                     </h1>
                     <p class="send-subtitle">
-                        Escolha uma das opções abaixo para conectar com o dispositivo
+                        Aponte a câmera do seu celular para o QR Code na tela do dispositivo que receberá o arquivo
                     </p>
                 </div>
 
                 <div class="connection-methods" id="freeMethods">
-                    <div class="method-card" id="qrCodeMethod">
+                    <div class="method-card" id="qrCodeMethod" style="max-width: 440px; margin: 0 auto; text-align: center; display: flex; flex-direction: column; align-items: center;">
                         <div class="method-icon">
                             <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect x="8" y="8" width="20" height="20" stroke="currentColor" stroke-width="2"
@@ -83,81 +83,12 @@
                         </div>
                         <h2 class="method-title">Escanear QR Code</h2>
                         <p class="method-description">
-                            Aponte a câmera do seu celular para o QR Code na tela do dispositivo que receberá o arquivo
+                            Use a câmera do celular para ler o código exibido na tela de recepção
                         </p>
                         <button class="method-button" onclick="showQRScanner()">
                             <span>Abrir câmera</span>
                             <svg viewBox="0 0 20 20" fill="currentColor">
-                                <path
-                                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" />
-                            </svg>
-                        </button>
-                    </div>
-
-                    <div class="method-divider">
-                        <span>OU</span>
-                    </div>
-
-                    <div class="method-card" id="codeMethod">
-                        <div class="method-icon">
-                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="8" y="24" width="12" height="16" stroke="currentColor" stroke-width="2"
-                                    rx="2" />
-                                <rect x="26" y="24" width="12" height="16" stroke="currentColor" stroke-width="2"
-                                    rx="2" />
-                                <rect x="44" y="24" width="12" height="16" stroke="currentColor" stroke-width="2"
-                                    rx="2" />
-                            </svg>
-                        </div>
-                        <h2 class="method-title">Digitar código</h2>
-                        <p class="method-description">
-                            Digite o código de 4 dígitos fornecido pelo dispositivo que receberá o arquivo
-                        </p>
-                        <button class="method-button" onclick="showCodeInput()">
-                            <span>Digitar código</span>
-                            <svg viewBox="0 0 20 20" fill="currentColor">
-                                <path
-                                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Code Input Section (Hidden initially) -->
-                <div class="code-input-section" id="codeInputSection" style="display: none;">
-                    <button class="back-button" onclick="hideCodeInput()">
-                        <svg viewBox="0 0 20 20" fill="currentColor">
-                            <path
-                                d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" />
-                        </svg>
-                        Voltar
-                    </button>
-
-                    <div class="code-input-container">
-                        <h2 class="code-input-title">Digite o código</h2>
-                        <p class="code-input-subtitle">Insira o código de 4 dígitos</p>
-
-                        <div class="code-digits">
-                            <input type="text" maxlength="1" class="code-digit" id="digit1" autocomplete="off">
-                            <input type="text" maxlength="1" class="code-digit" id="digit2" autocomplete="off">
-                            <input type="text" maxlength="1" class="code-digit" id="digit3" autocomplete="off">
-                            <input type="text" maxlength="1" class="code-digit" id="digit4" autocomplete="off">
-                        </div>
-
-                        <div class="code-error" id="codeError" style="display: none;">
-                            <svg viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            <span id="codeErrorMessage">Código inválido</span>
-                        </div>
-
-                        <button class="code-connect-button" id="connectButton" onclick="validateCode()" disabled>
-                            <span>Conectar</span>
-                            <svg viewBox="0 0 20 20" fill="currentColor">
-                                <path
-                                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" />
+                                <path fill-rule="evenodd" d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A1 1 0 0011.879 3H8.121a1 1 0 00-.707.293L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
                             </svg>
                         </button>
                     </div>

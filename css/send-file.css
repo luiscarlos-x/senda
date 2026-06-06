@@ -10,7 +10,7 @@
     flex-direction: column;
     align-items: center;
     padding: var(--spacing-xl) var(--spacing-lg);
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
     width: 100%;
 }
@@ -309,7 +309,7 @@
 
 /* ========== UPLOAD ========== */
 .upload-container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     text-align: center;
 }
@@ -587,26 +587,71 @@
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
     .send-main {
-        padding: var(--spacing-lg) var(--spacing-md);
+        padding: var(--spacing-sm) var(--spacing-sm);
     }
 
     .send-title {
         font-size: var(--font-size-2xl);
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .send-hero {
+        margin-bottom: var(--spacing-md);
+    }
+
+    .step-indicator {
+        margin-bottom: var(--spacing-md);
     }
 
     .method-card {
-        padding: var(--spacing-lg);
+        padding: var(--spacing-md);
     }
 
-    .code-digit {
-        width: 50px;
-        height: 60px;
+    .method-icon {
+        margin-bottom: var(--spacing-sm);
+        width: 36px;
+        height: 36px;
+    }
+
+    .method-title {
+        font-size: var(--font-size-lg);
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .method-description {
+        margin-bottom: var(--spacing-md);
+    }
+
+    .upload-container {
+        margin-top: 0;
+    }
+
+    .connected-badge {
+        margin-bottom: var(--spacing-md);
+        padding: 4px 10px;
+    }
+
+    .upload-title {
         font-size: var(--font-size-xl);
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .upload-subtitle {
+        margin-bottom: var(--spacing-md);
     }
 
     .upload-label {
-        padding: var(--spacing-xl);
-        min-height: 250px;
+        padding: var(--spacing-md);
+        min-height: 180px;
+    }
+
+    .upload-label svg {
+        width: 44px;
+        height: 44px;
+    }
+
+    .upload-text {
+        font-size: var(--font-size-base);
     }
 }
 

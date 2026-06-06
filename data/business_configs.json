@@ -6,7 +6,7 @@
     "desks": [
       {
         "id": "guiche-01",
-        "name": "Guichê 01",
+        "name": "Sessão 01",
         "createdAt": 1780362358740
       }
     ]
@@ -18,7 +18,7 @@
     "desks": [
       {
         "id": "guiche-01",
-        "name": "Guichê 01",
+        "name": "Sessão 01",
         "createdAt": 1780362542191
       }
     ]
@@ -30,12 +30,12 @@
     "desks": [
       {
         "id": "guiche-01",
-        "name": "Guichê 01",
+        "name": "Sessão 01",
         "createdAt": 1780362638362
       },
       {
         "id": "guiche-1780363171004",
-        "name": "Guichê 02",
+        "name": "Sessão 02",
         "createdAt": 1780363171004
       }
     ]

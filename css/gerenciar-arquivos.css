@@ -1,0 +1,384 @@
+/* ================================================
+   Senda - Gerenciar Arquivos Page Styles
+   File manager with green folder icons per session
+   ================================================ */
+
+/* ========== MAIN LAYOUT ========== */
+.manage-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--spacing-xl) var(--spacing-lg);
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.manage-header-simple {
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.manage-page-title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: var(--spacing-xs);
+}
+
+.manage-page-subtitle {
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+/* ========== FOLDERS GRID ========== */
+.folders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--spacing-md);
+    width: 100%;
+    margin-bottom: var(--spacing-xl);
+}
+
+.folder-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-lg) var(--spacing-md);
+    background-color: white;
+    border: 2px solid var(--warm-gray);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
+}
+
+.folder-card:hover {
+    border-color: #5F6F52;
+    background-color: #F0F4EC;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(95, 111, 82, 0.15);
+}
+
+.folder-card:active {
+    transform: translateY(-2px);
+}
+
+[data-theme="dark"] .folder-card {
+    background-color: var(--cream);
+    border-color: var(--warm-gray);
+}
+
+[data-theme="dark"] .folder-card:hover {
+    border-color: var(--sage-medium);
+    background-color: rgba(95, 111, 82, 0.15);
+}
+
+/* ========== FOLDER SVG ICON ========== */
+.folder-icon-svg {
+    width: 72px;
+    height: 72px;
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+}
+
+.folder-card:hover .folder-icon-svg {
+    transform: scale(1.08);
+}
+
+.folder-name {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    word-break: break-word;
+}
+
+.folder-file-count {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    background-color: var(--warm-gray);
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-weight: var(--font-weight-medium);
+}
+
+[data-theme="dark"] .folder-file-count {
+    background-color: var(--warm-gray);
+}
+
+/* ========== EMPTY STATE ========== */
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-2xl) var(--spacing-lg);
+    color: var(--text-secondary);
+}
+
+.empty-state-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--spacing-md);
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+.empty-state-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.empty-state-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.empty-state-text {
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+}
+
+/* ========== FILE BROWSER PANEL ========== */
+.file-browser-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    padding: var(--spacing-md);
+}
+
+.file-browser-overlay.show {
+    opacity: 1;
+}
+
+.file-browser-panel {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 560px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    transform: translateY(20px);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.file-browser-overlay.show .file-browser-panel {
+    transform: translateY(0);
+}
+
+[data-theme="dark"] .file-browser-panel {
+    background-color: var(--cream);
+}
+
+.file-browser-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--warm-gray);
+    flex-shrink: 0;
+}
+
+.file-browser-header-left {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.file-browser-folder-icon {
+    width: 32px;
+    height: 32px;
+}
+
+.file-browser-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.file-browser-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.file-browser-close:hover {
+    background-color: var(--warm-gray);
+    color: var(--text-primary);
+}
+
+.file-browser-close svg {
+    width: 20px;
+    height: 20px;
+}
+
+.file-browser-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-md) var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+/* ========== FILE ITEM ========== */
+.manage-file-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--warm-gray);
+    border-radius: var(--radius-md);
+    transition: var(--transition);
+}
+
+.manage-file-item:hover {
+    border-color: var(--sage-dark);
+    background-color: var(--sage-light);
+}
+
+[data-theme="dark"] .manage-file-item:hover {
+    background-color: rgba(95, 111, 82, 0.1);
+}
+
+.manage-file-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.manage-file-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.manage-file-name {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.manage-file-meta {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.manage-file-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+    flex-shrink: 0;
+}
+
+.manage-file-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.manage-file-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.manage-file-btn-download {
+    background-color: var(--sage-dark);
+    color: white;
+}
+
+.manage-file-btn-download:hover {
+    background-color: var(--sage-darker);
+}
+
+.manage-file-btn-delete {
+    background-color: #FEE2E2;
+    color: #DC2626;
+}
+
+.manage-file-btn-delete:hover {
+    background-color: #FECACA;
+}
+
+/* ========== BACK BUTTON (reuse from receive) ========== */
+.btn-manage-files {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    background-color: var(--sage-light);
+    color: var(--sage-darker);
+    border: none;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-manage-files:hover {
+    background-color: var(--sage-medium);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .manage-main {
+        padding: var(--spacing-lg) var(--spacing-md);
+    }
+
+    .folders-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: var(--spacing-sm);
+    }
+
+    .folder-card {
+        padding: var(--spacing-md) var(--spacing-sm);
+    }
+
+    .folder-icon-svg {
+        width: 56px;
+        height: 56px;
+    }
+
+    .manage-page-title {
+        font-size: var(--font-size-xl);
+    }
+
+    .file-browser-panel {
+        max-height: 90vh;
+    }
+}

@@ -2,7 +2,6 @@
 
 const BACKEND_URL = window.location.origin;
 let socket = null;
-let codeDigits = ['', '', '', ''];
 let selectedFiles = [];
 let currentSessionId = null;
 let html5QrCode = null; // QR Code scanner instance
@@ -42,7 +41,7 @@ function checkUrlParameters() {
         currentSessionId = `business_${businessParam}_${deskParam}`;
         isBusinessSession = true;
         
-        console.log(`📡 Conectando ao guichê corporativo: ${currentSessionId}`);
+        console.log(`📡 Conectando à sessão corporativa: ${currentSessionId}`);
         showLoadingConnectionState();
         
         socket.emit('join-as-sender', {
@@ -116,110 +115,7 @@ function updateConnectionUI() {
     }
 }
 
-function showCodeInput() {
-    document.querySelector('.connection-methods').style.display = 'none';
-    document.getElementById('codeInputSection').style.display = 'block';
-    setTimeout(() => document.getElementById('digit1')?.focus(), 100);
-    setupCodeInputs();
-}
 
-function hideCodeInput() {
-    document.querySelector('.connection-methods').style.display = 'grid';
-    document.getElementById('codeInputSection').style.display = 'none';
-    clearCode();
-}
-
-function setupCodeInputs() {
-    const digits = document.querySelectorAll('.code-digit');
-
-    digits.forEach((digit, i) => {
-        digit.addEventListener('input', (e) => {
-            const val = e.target.value;
-            if (!/^\d$/.test(val)) {
-                e.target.value = '';
-                return;
-            }
-            codeDigits[i] = val;
-            e.target.classList.add('filled');
-            if (val && i < 3) digits[i + 1].focus();
-            updateConnectButton();
-        });
-
-        digit.addEventListener('keydown', (e) => {
-            if (e.key === 'Backspace') {
-                if (!digit.value && i > 0) {
-                    digits[i - 1].focus();
-                    digits[i - 1].value = '';
-                    digits[i - 1].classList.remove('filled');
-                    codeDigits[i - 1] = '';
-                } else {
-                    digit.value = '';
-                    digit.classList.remove('filled');
-                    codeDigits[i] = '';
-                }
-                updateConnectButton();
-                e.preventDefault();
-            }
-        });
-
-        digit.addEventListener('paste', (e) => {
-            e.preventDefault();
-            const nums = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 4);
-            nums.split('').forEach((n, idx) => {
-                if (idx < 4) {
-                    digits[idx].value = n;
-                    digits[idx].classList.add('filled');
-                    codeDigits[idx] = n;
-                }
-            });
-            updateConnectButton();
-        });
-    });
-}
-
-function updateConnectButton() {
-    document.getElementById('connectButton').disabled = !codeDigits.every(d => d !== '');
-}
-
-function clearCode() {
-    codeDigits = ['', '', '', ''];
-    document.querySelectorAll('.code-digit').forEach(d => {
-        d.value = '';
-        d.classList.remove('filled');
-    });
-    document.getElementById('codeError').style.display = 'none';
-    updateConnectButton();
-}
-
-async function validateCode() {
-    const code = codeDigits.join('');
-    const err = document.getElementById('codeError');
-    const errMsg = document.getElementById('codeErrorMessage');
-
-    try {
-        const res = await fetch(`${BACKEND_URL}/api/session/${code}`);
-
-        if (res.ok) {
-            const data = await res.json();
-            currentSessionId = data.sessionId;
-
-            if (socket?.connected) socket.emit('join-as-sender', data.sessionId);
-
-            goToUploadStep();
-        } else {
-            err.style.display = 'flex';
-            errMsg.textContent = 'Codigo invalido ou expirado';
-
-            setTimeout(() => {
-                clearCode();
-                document.getElementById('digit1')?.focus();
-            }, 1500);
-        }
-    } catch (e) {
-        err.style.display = 'flex';
-        errMsg.textContent = 'Erro ao conectar. Servidor rodando?';
-    }
-}
 
 function showQRScanner() {
     document.querySelector('.connection-methods').style.display = 'none';
@@ -276,7 +172,7 @@ function hideQRScanner() {
         });
     }
 
-    document.querySelector('.connection-methods').style.display = 'grid';
+    document.querySelector('.connection-methods').style.display = 'flex';
     document.getElementById('qrScannerSection').style.display = 'none';
 }
 

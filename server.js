@@ -231,7 +231,139 @@ app.post('/api/business/config/:businessId', (req, res) => {
     }
 });
 
+// ===== ROTAS API GERENCIAMENTO DE ARQUIVOS (BUSINESS) =====
+
+// Listar todas as sessões e seus arquivos persistidos
+app.get('/api/business/files/:businessId', (req, res) => {
+    const businessId = req.params.businessId.toLowerCase().trim();
+    const config = Database.getBusinessConfig(businessId);
+    if (!config) {
+        return res.status(404).json({ error: 'Empresa não encontrada' });
+    }
+
+    // Se persistência está desativada (lgpdZeroStorage = true), não há arquivos para listar
+    if (config.lgpdZeroStorage) {
+        return res.json({ sessions: [], persistenceEnabled: false });
+    }
+
+    const businessDir = path.join(UPLOAD_DIR, businessId);
+    const sessionsData = [];
+
+    if (fs.existsSync(businessDir)) {
+        const deskFolders = fs.readdirSync(businessDir, { withFileTypes: true })
+            .filter(d => d.isDirectory());
+
+        for (const folder of deskFolders) {
+            const deskId = folder.name;
+            const deskPath = path.join(businessDir, deskId);
+
+            // Buscar nome da sessão na config
+            const deskConfig = config.desks.find(d => d.id === deskId);
+            const deskName = deskConfig ? deskConfig.name : deskId;
+
+            // Listar arquivos da pasta
+            const files = [];
+            if (fs.existsSync(deskPath)) {
+                const entries = fs.readdirSync(deskPath);
+                for (const entry of entries) {
+                    const filePath = path.join(deskPath, entry);
+                    const stat = fs.statSync(filePath);
+                    if (stat.isFile()) {
+                        // Extrair nome original do filename (formato: sessionId-timestamp-random.ext)
+                        const ext = path.extname(entry);
+                        files.push({
+                            filename: entry,
+                            originalName: entry,
+                            size: stat.size,
+                            mimeType: getMimeType(ext),
+                            createdAt: stat.mtimeMs
+                        });
+                    }
+                }
+            }
+
+            if (files.length > 0) {
+                sessionsData.push({
+                    deskId: deskId,
+                    deskName: deskName,
+                    files: files
+                });
+            }
+        }
+    }
+
+    res.json({ sessions: sessionsData, persistenceEnabled: true });
+});
+
+// Download de arquivo específico do gerenciador
+app.get('/api/business/files/:businessId/:deskId/:filename', (req, res) => {
+    const { businessId, deskId, filename } = req.params;
+    const filePath = path.join(UPLOAD_DIR, businessId.toLowerCase().trim(), deskId, filename);
+
+    // Segurança: prevenir path traversal
+    const resolvedPath = path.resolve(filePath);
+    const resolvedUploadDir = path.resolve(UPLOAD_DIR);
+    if (!resolvedPath.startsWith(resolvedUploadDir)) {
+        return res.status(403).json({ error: 'Acesso negado' });
+    }
+
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).json({ error: 'Arquivo não encontrado' });
+    }
+
+    res.download(filePath, filename, (err) => {
+        if (err) console.error('Erro no download:', err);
+    });
+});
+
+// Deletar arquivo específico do gerenciador
+app.delete('/api/business/files/:businessId/:deskId/:filename', (req, res) => {
+    const { businessId, deskId, filename } = req.params;
+    const filePath = path.join(UPLOAD_DIR, businessId.toLowerCase().trim(), deskId, filename);
+
+    // Segurança: prevenir path traversal
+    const resolvedPath = path.resolve(filePath);
+    const resolvedUploadDir = path.resolve(UPLOAD_DIR);
+    if (!resolvedPath.startsWith(resolvedUploadDir)) {
+        return res.status(403).json({ error: 'Acesso negado' });
+    }
+
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).json({ error: 'Arquivo não encontrado' });
+    }
+
+    try {
+        fs.unlinkSync(filePath);
+        console.log(`🗑️  Arquivo deletado via gerenciador: ${filename}`);
+
+        // Limpar pasta vazia
+        const dirPath = path.dirname(filePath);
+        if (fs.existsSync(dirPath) && fs.readdirSync(dirPath).length === 0) {
+            fs.rmdirSync(dirPath);
+            console.log(`🗑️  Diretório da sessão vazio removido: ${dirPath}`);
+        }
+
+        res.json({ success: true });
+    } catch (e) {
+        console.error('Erro ao deletar arquivo:', e);
+        res.status(500).json({ error: 'Erro ao deletar arquivo' });
+    }
+});
+
+// Função auxiliar para determinar MIME type pela extensão
+function getMimeType(ext) {
+    const types = {
+        '.pdf': 'application/pdf',
+        '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg',
+        '.png': 'image/png',
+        '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    };
+    return types[ext.toLowerCase()] || 'application/octet-stream';
+}
+
 // ===== ROTAS API =====
+
 
 // Criar nova sessão (Modo Grátis)
 app.post('/api/session', (req, res) => {
