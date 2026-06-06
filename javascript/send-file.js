@@ -295,10 +295,32 @@ function onScanSuccess(decodedText, decodedResult) {
     try {
         const url = new URL(decodedText);
         const sessionParam = url.searchParams.get('session');
+        const businessParam = url.searchParams.get('business');
+        const deskParam = url.searchParams.get('desk');
 
-        if (sessionParam) {
-            // Validate session and proceed
+        if (businessParam && deskParam) {
+            // Sessão Business via QR Code
+            currentSessionId = `business_${businessParam}_${deskParam}`;
+            isBusinessSession = true;
+
+            if (socket && socket.connected) {
+                showLoadingConnectionState();
+                socket.emit('join-as-sender', {
+                    businessId: businessParam,
+                    deskId: deskParam
+                });
+            } else {
+                // Redirecionar para a página com os parâmetros na URL
+                window.location.href = `${url.pathname}?business=${encodeURIComponent(businessParam)}&desk=${encodeURIComponent(deskParam)}`;
+            }
+        } else if (sessionParam) {
+            // Sessão gratuita via QR Code
             currentSessionId = sessionParam;
+            isBusinessSession = false;
+
+            if (socket && socket.connected) {
+                socket.emit('join-as-sender', sessionParam);
+            }
             setTimeout(() => goToUploadStep(), 500);
         } else {
             alert('QR Code inválido. Não contém sessão.');
