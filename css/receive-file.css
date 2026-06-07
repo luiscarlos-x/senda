@@ -626,11 +626,11 @@
 }
 
 [data-theme="dark"] .privacy-summary {
-    color: var(--sage-light);
+    color: var(--sage-darker);
 }
 
 [data-theme="dark"] .privacy-summary:hover {
-    color: var(--sage-medium);
+    color: var(--sage-dark);
 }
 
 /* Sessões Manager Styling */
@@ -686,6 +686,28 @@
 
 .btn-add-desk:hover {
     background-color: var(--sage-darker);
+}
+
+/* Button Manage Files (in configurations sidebar) */
+.btn-manage-files {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    background-color: var(--sage-light);
+    color: var(--sage-darker);
+    border: none;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-manage-files:hover {
+    background-color: var(--sage-medium);
 }
 
 /* ========== SANDWICH MENU BUTTON ========== */
